@@ -1,0 +1,100 @@
+import pandas as pd
+
+datainput = pd.read_csv("drug.csv", delimiter=",") #https://www.kaggle.com/gangliu/drugsets
+print(datainput)
+
+
+
+import numpy as np
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+
+datainput = pd.read_csv("drug.csv", delimiter=",")
+
+X = datainput[['Age', 'Sex', 'BP', 'Cholesterol', 'Na_to_K']].values
+
+from sklearn import preprocessing
+label_gender = preprocessing.LabelEncoder()
+label_gender.fit(['F','M'])
+X[:,1] = label_gender.transform(X[:,1])
+
+label_BP = preprocessing.LabelEncoder()
+label_BP.fit([ 'LOW', 'NORMAL', 'HIGH'])
+X[:,2] = label_BP.transform(X[:,2])
+
+label_Chol = preprocessing.LabelEncoder()
+label_Chol.fit([ 'NORMAL', 'HIGH'])
+X[:,3] = label_Chol.transform(X[:,3])
+
+# Printing the first 6 records
+print(X[0:6])
+
+
+
+import pandas as pd
+
+datainput = pd.read_csv("drug.csv", delimiter=",")
+X = datainput[['Age', 'Sex', 'BP', 'Cholesterol', 'Na_to_K']].values
+
+y = datainput["Drug"]
+
+print(y[0:6])
+
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+datainput = pd.read_csv("drug.csv", delimiter=",")
+
+X = datainput[['Age', 'Sex', 'BP', 'Cholesterol', 'Na_to_K']].values
+
+y = datainput["Drug"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=3)
+
+print(X_train.shape)
+print(X_test.shape)
+print(y_train.shape)
+print(y_test.shape)
+
+
+
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import metrics
+
+datainput = pd.read_csv("drug.csv", delimiter=",")
+
+X = datainput[['Age', 'Sex', 'BP', 'Cholesterol', 'Na_to_K']].values
+
+# Data Preprocessing
+from sklearn import preprocessing
+
+label_gender = preprocessing.LabelEncoder()
+label_gender.fit(['F', 'M'])
+X[:, 1] = label_gender.transform(X[:, 1])
+
+label_BP = preprocessing.LabelEncoder()
+label_BP.fit(['LOW', 'NORMAL', 'HIGH'])
+X[:, 2] = label_BP.transform(X[:, 2])
+
+label_Chol = preprocessing.LabelEncoder()
+label_Chol.fit(['NORMAL', 'HIGH'])
+X[:, 3] = label_Chol.transform(X[:, 3])
+
+y = datainput["Drug"]
+
+# train_test_split
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=3)
+
+drugTree = DecisionTreeClassifier(criterion="entropy", max_depth=4)
+
+drugTree.fit(X_train, y_train)
+predicted = drugTree.predict(X_test)
+
+print(predicted)
+
+print("\nDecisionTrees's Accuracy: ", metrics.accuracy_score(y_test, predicted))
